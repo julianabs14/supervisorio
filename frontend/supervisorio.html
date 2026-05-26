@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Supervisório IGV</title>
         <link rel="stylesheet" href="css/supervisorio.css">
-
+        <link rel="stylesheet" href="css/style.css"></link>
     </head>
 
     <body>
@@ -20,10 +20,63 @@
         <main class="supervisorio-grid">
             <section class="card" id="card-status">
                 <p card-titulo>STATUS DO SISTEMA</p>
+                <div class="status-badge status-ok">
+                    <span class="status-icone"></span><!--adicionar icone de coference-->
+                    <span class="status-texto">EM OPERAÇÃO</span>
+                </div>
+                <p class="status-sub">Inspenção em andamento</p>
+            </section>
 
+            <section class="card" id="card-producao">
+                <p class="card-titulo">PRODUÇÃO EM TEMPO REAL</p>
+                <div class="linha-dado">
+                    <span>Peças inspecionadas</span>
+                    <span class="valor">9.842 unidades</span>
+                </div>
+
+
+                <div class="linha-dado">
+                    <span>Peças aprovadas</span>
+                    <span class="valor-verde">9.102 unidades</span>
+                </div>
+
+                <div class="linha-dado">
+                    <span>Peças rejeitadas</span>
+                    <span class="valor-vermelho">740 unidades</span>
+                </div>
+
+                <div class="linha-dado">
+                    <span>Taxa de rejeição</span>
+                    <span class="valor-vermelho">7,53%</span>
+                </div>
+            </section>
+
+            <section class="card" id="card-parada">
+                <p class="card-titulo">TEMPO DE PARADA</p>
+                <div class="linha-dado">
+                    <span>Início da parada</span>
+                    <span class="valor">14:25:47</span>
+                </div>
+
+                <div class="linha-dado-destaque">
+                    <span>Tempo parado</span>
+                    <span class="valor-amarelo">00:06:32</span>
+                </div>
+
+                <div class="linha-dado">
+                    <span>Média de Paradas (Hoje)</span>
+                    <span class="valor=00:06:15"></span>
+                </div>
+
+                <div class="linha-dado">
+                    <span>Total de Paradas (Hoje)</span>
+                    <span class="valor">4</span>
+                </div>
             </section>
 
         </main>
+
+        <script src="js/app.js"></script>
 
     </body>
 

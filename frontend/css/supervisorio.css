@@ -1,0 +1,122 @@
+:root {
+    --bg: #0a0e1a; /*cor de fundo/background*/
+    --painel: #0f1535; /*painéis*/
+    --borda:  #1e2d5a;  /*bordas da página*/
+    --accent: #5b8cff; /* navy blue*/
+    --accent2: #a855f7; /*purple*/
+    --texto: #c8d8f0; /*texto claro*/
+    --texto2: #4a6080; /*texto secundário*/
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.barranav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 24px;
+    background-color: var(--painel);
+    border-bottom: 1px solid var(--borda);
+}
+
+.barra-logo {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--accent);
+}
+
+.barra-user {
+    font-size: 14px;
+    color: var(--texto2);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 24px;
+}
+
+.card {
+    background-color: var(--painel);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.card-titulo {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--texto2);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.status-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.status-ok {
+    color: #00e676;
+}
+
+.status-icone {
+    font-size: 28px;
+}
+
+.status-texto {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.linha-dado {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--borda);
+    font-size: 14px;
+}
+
+.linha-dado:last-child {
+    border-bottom: none;
+}
+
+.valor {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.verde {
+    color: #00e676;
+}
+
+.vermelho {
+    color: #ff3d3d;
+}
+
+.amarelo {
+    color: #ffd600;
+}
+
+#btn-logout {
+    padding: 8px 16px;
+    background-color: transparent;
+    color: var(--accent2);
+    border: 1px solid var(--accent2);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+#btn-logout {
+    background-color: var(--accent2);
+    color: var(--texto);
+}
