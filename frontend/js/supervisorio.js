@@ -29,3 +29,8 @@ botoes.forEach(function(botao){
 
     });
 });
+
+document.getElementById('btn-logout').addEventListener('click', function() {
+    localStorage.removeItem('usuarioLogado')
+    window.location.href = 'index.html'
+})

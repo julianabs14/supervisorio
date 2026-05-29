@@ -28,7 +28,7 @@
                 <section class="card" id="card-status">
                     <p class="card-titulo">STATUS DO SISTEMA</p>
                     <div class="status-badge status-ok">
-                        <span class="status-icone"></span><!--adicionar icone de coference-->
+                        <span class="status-icone">✔</span><!--adicionar icone de coference-->
                         <span class="status-texto">EM OPERAÇÃO</span>
                     </div>
                     <p class="status-sub">Inspenção em andamento</p>
@@ -65,7 +65,7 @@
                         <span class="valor">14:25:47</span>
                     </div>
 
-                    <div class="linha-dado-destaque">
+                    <div class="linha-dado destaque">
                         <span>Tempo parado</span>
                         <span class="valor amarelo">00:06:32</span>
                     </div>
@@ -83,15 +83,193 @@
             </div>
 
             <div class="secao" id="falhas">
-                <p>Em construção...</p>
+                <div class="secao-grid">
+
+                    <section class="card" id="card-falha-atual">
+                        <p class="card-titulo">Falha atual</p>
+                        <div class="falha-badge">
+                            <span class="falha-icon">⚠️</span>
+                            <span class="falha-texto vermelho">GARRAFA TRICADA</span>
+                        </div>
+                        <p class="falha-detalhe">Câmera: C03 - Lateral</p>
+                        <p class="falha-detalhe">Confiança: 94%</p>
+
+                    </section>
+
+                    <section class="card" id="card-top-falhas">
+                        <p class="card-titulo">Top Tipos Falha (Hoje)</p>
+                        <div class="linha-dado">
+                            <span>1. Trinca no corpo</span>
+                            <span class="valor vermelho">186 (42,7%)</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>2. Mancha</span>
+                            <span class="valor amarelo">92 (21,1%)</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>3. Soda Cáustica</span>
+                            <span class="valor amarelo">64 (14,6%)</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>4. Sujeira</span>
+                            <span class="valor">51 (11,8%)</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>5. Risco</span>
+                            <span class="valor">31 (7,0%)</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>6. Outros</span>
+                            <span class="valor">12 (2,8%)</span>
+                        </div>
+                    </section>
+
+                </div>
+                
             </div>
 
             <div class="secao" id="producao">
-                <p>Em construção...</p>
+                <div class="secao-grid">
+                    <section class="card" id="card-sku">
+                        <p class="card-titulo">SKU / Lote Atual</p>
+                        <div class="linha-dado">
+                            <span>Marca</span>
+                            <span class="valor">SCHIN</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>SKU</span>
+                            <span class="valor">SCHIN 600ml</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Lote</span>
+                            <span class="valor">L240517A</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Envase</span>
+                            <span class="valor">17/05/2024 08:15</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Linha</span>
+                            <span class="valor">LINHA 02</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Velocidade</span>
+                            <span class="valor verde">24.000 un/h</span>
+                        </div>
+
+                    </section>
+
+                    <section class="card" id="card-desempenho">
+                        <p class="card-titulo">Desempenho do Sistema (Hoje)</p>
+                        <div class="linha-dado">
+                            <span>Eficiência</span>
+                            <span class="valor verde">91,2%</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Disponibilidade</span>
+                            <span class="valor verde">86,7%</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Qualidade</span>
+                            <span class="valor verde">92,5%</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>OEE (Hoje)</span>
+                            <span class="valor amarelo">72,8%</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>MTBF</span>
+                            <span class="valor">02:48:17</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>MTTR</span>
+                            <span class="valor">00:06:15</span>
+                        </div>
+                    </section>
+
+                </div>
             </div>
 
             <div class="secao" id="manutencao">
-                <p>Em construção...</p>
+                <div class="secao-grid">
+                    <section class="card" id="card-alertas">
+                        <p class="card-titulo">Alertas e Eventos (Tempo Real)</p>
+                        <div class="linha-dado">
+                            <span>14:32:12</span>
+                            <span class="vermelho">Garrafa trincada</span>
+                            <span class="texto2">Trinca no corpo</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>14:32:05</span>
+                            <span class="vermelho">Garrafa trincada</span>
+                            <span class="texto2">Trinca no ombro</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>14:31:58</span>
+                            <span class="amarelo">Garrafa com mancha</span>
+                            <span class="texto2">Mancha marrom</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>14:31:47</span>
+                            <span class="amarelo">Soda cáustica</span>
+                            <span class="texto2">Resíduo de soda</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>14:31:35</span>
+                            <span class="verde">Garrafa suja</span>
+                            <span class="texto2">Sujeira no corpo</span>
+                        </div>
+
+                    </section>
+
+                    <section class="card" id="card-info">
+                        <p class="card-titulo">Informações Extras</p>
+                        <div class="linha-dado">
+                            <span>Total de Câmeras</span>
+                            <span class="valor">5</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Total de Triggers</span>
+                            <span class="valor">5</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Temperatura do Sistema</span>
+                            <span class="valor amarelo">32,4°C</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Iluminação</span>
+                            <span class="valor verde">OK</span>
+                        </div>
+
+                        <div class="linha-dado">
+                            <span>Comunicação</span>
+                            <span class="valor verde">OK</span>
+                        </div>
+                    </section>
+
+                </div>
             </div>
 
         </main>

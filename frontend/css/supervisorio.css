@@ -10,9 +10,23 @@
 
 body {
     background-color: var(--bg);
+    color: var(--texto);
+    font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+}
+
+#visao-geral {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.secao-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
 }
 
 .barranav {
@@ -39,20 +53,22 @@ body {
 }
 
 .dashboard-main {
-    padding: 24px;
+    padding: 32px;
 }
 
-#visao-geral {
-    display: grid;
+.secao.ativa {
+    display: block;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+    gap: 24px;
 }
+
 
 .card {
     background-color: var(--painel);
     border: 1px solid var(--borda);
     border-radius: 8px;
     padding: 20px;
+    min-height: 200px;
 }
 
 .card-titulo {
@@ -83,9 +99,12 @@ body {
     font-weight: bold;
 }
 
-span {
-    
+#card-alertas .linha-dado {
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    gap: 8px;
 }
+
 
 .linha-dado {
     display: flex;
@@ -133,10 +152,6 @@ span {
 }
 .secao {
     display: none;
-}
-
-.secao.ativa {
-    display: block;
 }
 
 .navegacao {
