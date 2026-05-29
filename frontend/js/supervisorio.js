@@ -1,4 +1,13 @@
 //navegação 
+const usuarioLogado = localStorage.getItem('usuarioLogado');
+
+if (!usuarioLogado) {
+    window.location.href = 'index.html';
+
+};
+
+document.getElementById('nome-usuario').textContent = usuarioLogado
+
 const botoes = document.querySelectorAll('.btn-nav, .btn-nav-ativo');
 
 botoes.forEach(function(botao){

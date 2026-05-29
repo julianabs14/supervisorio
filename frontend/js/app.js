@@ -25,18 +25,3 @@ formLogin.addEventListener('submit', function(evento) {
         alert('Usuário ou senha incorretos');
     }
 });
-
-const usuarioLogado = localStorage.getItem('usuarioLogado');
-
-if (!usuarioLogado) {
-    window.location.href = 'index.html';
-
-};
-
-document.getElementById('nome-usuario').textContent = usuarioLogado;
-
-document.getElementById('btn-logout').addEventListener('click', function(){ 
-    localStorage.removeItem('usuarioLogado');
-    window.location.href = 'index.html';
-
-});
