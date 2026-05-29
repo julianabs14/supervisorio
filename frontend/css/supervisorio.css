@@ -179,3 +179,30 @@ body {
     font-size: 13px;
     font-weight: bold;
 }
+
+@media (max-width: 768px) {
+
+    .barranav {
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .navegacao {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #visao-geral {
+        grid-template-columns: 1fr;
+    }
+
+    .secao-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-main {
+        padding: 16px;
+    }
+
+}
