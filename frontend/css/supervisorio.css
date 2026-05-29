@@ -9,6 +9,7 @@
 }
 
 body {
+    background-color: var(--bg);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -26,11 +27,14 @@ body {
 .barra-logo {
     font-size: 18px;
     font-weight: bold;
-    color: var(--accent);
+    background: linear-gradient(90deg, var(--accent), #38bdf8, var(--accent2), #ec4899);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .barra-user {
-    font-size: 14px;
+    font-size: 16px;
     color: var(--texto2);
 }
 
@@ -52,9 +56,9 @@ body {
 }
 
 .card-titulo {
-    font-size: 11px;
+    font-size: 14px;
     letter-spacing: 2px;
-    color: var(--texto2);
+    color: var(--texto);
     text-transform: uppercase;
     margin-bottom: 16px;
 }
@@ -77,6 +81,10 @@ body {
 .status-texto {
     font-size: 22px;
     font-weight: bold;
+}
+
+span {
+    
 }
 
 .linha-dado {
