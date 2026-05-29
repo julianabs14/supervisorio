@@ -37,6 +37,6 @@ document.getElementById('nome-usuario').textContent = usuarioLogado;
 
 document.getElementById('btn-logout').addEventListener('click', function(){ 
     localStorage.removeItem('usuarioLogado');
-    window.location.href = 'index.html'
+    window.location.href = 'index.html';
 
-})
+});

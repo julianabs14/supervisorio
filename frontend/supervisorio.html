@@ -6,77 +6,97 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Supervisório IGV</title>
         <link rel="stylesheet" href="css/supervisorio.css">
-        <link rel="stylesheet" href="css/style.css"></link>
     </head>
 
     <body>
         
         <header class="barranav">
             <span class="barra-logo">TECHNOSENSOR</span>
+                <nav class="navegacao">
+                    <button class="btn-nav-ativo" data-secao="visao-geral">Visão Geral</button>
+                    <button class="btn-nav" data-secao="falhas">Falhas</button>
+                    <button class="btn-nav" data-secao="producao">Produção</button>
+                    <button class="btn-nav" data-secao="manutencao">Manutenção</button>
+                </nav>
+
             <span class="barra-user" id="nome-usuario"></span>
             <button id="btn-logout">Sair</button>
         </header>
 
-        <main class="supervisorio-grid">
-            <section class="card" id="card-status">
-                <p card-titulo>STATUS DO SISTEMA</p>
-                <div class="status-badge status-ok">
-                    <span class="status-icone"></span><!--adicionar icone de coference-->
-                    <span class="status-texto">EM OPERAÇÃO</span>
-                </div>
-                <p class="status-sub">Inspenção em andamento</p>
-            </section>
+        <main class="dashboard-main">
+            <div class="secao ativa" id="visao-geral">
+                <section class="card" id="card-status">
+                    <p class="card-titulo">STATUS DO SISTEMA</p>
+                    <div class="status-badge status-ok">
+                        <span class="status-icone"></span><!--adicionar icone de coference-->
+                        <span class="status-texto">EM OPERAÇÃO</span>
+                    </div>
+                    <p class="status-sub">Inspenção em andamento</p>
+                </section>
 
-            <section class="card" id="card-producao">
-                <p class="card-titulo">PRODUÇÃO EM TEMPO REAL</p>
-                <div class="linha-dado">
-                    <span>Peças inspecionadas</span>
-                    <span class="valor">9.842 unidades</span>
-                </div>
+                <section class="card" id="card-producao">
+                    <p class="card-titulo">PRODUÇÃO EM TEMPO REAL</p>
+                    <div class="linha-dado">
+                        <span>Peças inspecionadas</span>
+                        <span class="valor">9.842 unidades</span>
+                    </div>
 
 
-                <div class="linha-dado">
-                    <span>Peças aprovadas</span>
-                    <span class="valor-verde">9.102 unidades</span>
-                </div>
+                    <div class="linha-dado">
+                        <span>Peças aprovadas</span>
+                        <span class="valor verde">9.102 unidades</span>
+                    </div>
 
-                <div class="linha-dado">
-                    <span>Peças rejeitadas</span>
-                    <span class="valor-vermelho">740 unidades</span>
-                </div>
+                    <div class="linha-dado">
+                        <span>Peças rejeitadas</span>
+                        <span class="valor vermelho">740 unidades</span>
+                    </div>
 
-                <div class="linha-dado">
-                    <span>Taxa de rejeição</span>
-                    <span class="valor-vermelho">7,53%</span>
-                </div>
-            </section>
+                    <div class="linha-dado">
+                        <span>Taxa de rejeição</span>
+                        <span class="valor vermelho">7,53%</span>
+                    </div>
+                </section>
 
-            <section class="card" id="card-parada">
-                <p class="card-titulo">TEMPO DE PARADA</p>
-                <div class="linha-dado">
-                    <span>Início da parada</span>
-                    <span class="valor">14:25:47</span>
-                </div>
+                <section class="card" id="card-parada">
+                    <p class="card-titulo">TEMPO DE PARADA</p>
+                    <div class="linha-dado">
+                        <span>Início da parada</span>
+                        <span class="valor">14:25:47</span>
+                    </div>
 
-                <div class="linha-dado-destaque">
-                    <span>Tempo parado</span>
-                    <span class="valor-amarelo">00:06:32</span>
-                </div>
+                    <div class="linha-dado-destaque">
+                        <span>Tempo parado</span>
+                        <span class="valor amarelo">00:06:32</span>
+                    </div>
 
-                <div class="linha-dado">
-                    <span>Média de Paradas (Hoje)</span>
-                    <span class="valor=00:06:15"></span>
-                </div>
+                    <div class="linha-dado">
+                        <span>Média de Paradas (Hoje)</span>
+                        <span class="valor">00:06:15</span>
+                    </div>
 
-                <div class="linha-dado">
-                    <span>Total de Paradas (Hoje)</span>
-                    <span class="valor">4</span>
-                </div>
-            </section>
+                    <div class="linha-dado">
+                        <span>Total de Paradas (Hoje)</span>
+                        <span class="valor">4</span>
+                    </div>
+                </section>
+            </div>
+
+            <div class="secao" id="falhas">
+                <p>Em construção...</p>
+            </div>
+
+            <div class="secao" id="producao">
+                <p>Em construção...</p>
+            </div>
+
+            <div class="secao" id="manutencao">
+                <p>Em construção...</p>
+            </div>
 
         </main>
 
-        <script src="js/app.js"></script>
+        <script src="js/supervisorio.js"></script>
 
     </body>
 
