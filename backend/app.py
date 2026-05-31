@@ -15,7 +15,7 @@ def status():
         'pecas_inspecionadas': 9842,
         'pecas_aprovadas': 9102,
         'pecas_rejeitadas': 740,
-        'taxa_rejeiao': 7.53
+        'taxa_rejeicao': 7.53
     }
     return jsonify(dados)
 
