@@ -45,4 +45,8 @@ fetch('http://127.0.0.1:5000/status')
         document.getElementById('pecas-aprovadas').textContent = dados.pecas_aprovadas + ' unidades'
         document.getElementById('pecas-rejeitadas').textContent = dados.pecas_rejeitadas + ' unidades'
         document.getElementById('taxa-rejeicao').textContent = dados.taxa_rejeiao + '%'
+        document.getElementById('inicio-parada').textContent = dados.inicio_parada
+        document.getElementById('tempo-parado').textContent = dados.tempo_parado
+        document.getElementById('media-paradas').textContent = dados.media_paradas
+        document.getElementById('total-paradas').textContent = dados.total_paradas
     });
