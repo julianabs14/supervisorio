@@ -17,12 +17,12 @@ def status():
     aba = base_de_dados.active
 
     dados = {
-        'status': aba['A2'].value,
-        'pecas_inspecionadas': aba['B2'].value,
-        'pecas_aprovadas': aba['C2'].value,
-        'pecas_rejeitadas': aba['D2'].value,
-        'taxa_rejeicao': aba['E2'].value
-    }
+    'status': aba.cell(row=2, column=1).value,
+    'pecas_inspecionadas': aba.cell(row=2, column=2).value,
+    'pecas_aprovadas': aba.cell(row=2, column=3).value,
+    'pecas_rejeitadas': aba.cell(row=2, column=4).value,
+    'taxa_rejeiao': aba.cell(row=2, column=5).value
+}
     return jsonify(dados)
 
 if __name__ == '__main__':
