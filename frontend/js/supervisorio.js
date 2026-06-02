@@ -33,4 +33,16 @@ botoes.forEach(function(botao){
 document.getElementById('btn-logout').addEventListener('click', function() {
     localStorage.removeItem('usuarioLogado')
     window.location.href = 'index.html'
-})
+});
+
+fetch('http://127.0.0.1:5000/status')
+    .then(function(resposta) {
+        return resposta.json()
+    })
+    .then(function(dados) {
+        document.querySelector('.status-texto').textContent = dados.status
+        document.getElementById('pecas-inspecionadas').textContent = dados.pecas_inspecionadas + ' unidades'
+        document.getElementById('pecas-aprovadas').textContent = dados.pecas_aprovadas + ' unidades'
+        document.getElementById('pecas-rejeitadas').textContent = dados.pecas_rejeitadas + ' unidades'
+        document.getElementById('taxa-rejeicao').textContent = dados.taxa_rejeiao + '%'
+    });
