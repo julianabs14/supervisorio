@@ -1,13 +1,13 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import openpyxl
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
+@app.route('/app')
 def inicio():
-    return jsonify({'mensagem': 'API Technosensor funcionando'})
+    return send_from_directory('../frontend', 'supervisorio.html')
 
 @app.route('/status')
 def status():
@@ -45,7 +45,7 @@ def status():
     'lote': aba.cell(row=2, column=21).value,
     'envase': converter(aba.cell(row=2, column=22).value),
     'linha': aba.cell(row=2, column=23).value,
-    'velocidade': aba.cell(row=2, column=24).value,
+    'velocidade': converter(aba.cell(row=2, column=24).value),
     'eficiencia': aba.cell(row=2, column=25).value,
     'disponibilidade': aba.cell(row=2, column=26).value,
     'qualidade': aba.cell(row=2, column=27).value,

@@ -67,7 +67,7 @@ body {
     background-color: var(--painel);
     border: 1px solid var(--borda);
     border-radius: 8px;
-    padding: 20px;
+    padding: 25px;
     min-height: 200px;
 }
 
