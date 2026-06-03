@@ -49,4 +49,26 @@ fetch('http://127.0.0.1:5000/status')
         document.getElementById('tempo-parado').textContent = dados.tempo_parado
         document.getElementById('media-paradas').textContent = dados.media_paradas
         document.getElementById('total-paradas').textContent = dados.total_paradas
+        document.getElementById('status-garrafa').textContent = dados.status_garrafa
+        document.getElementById('camera').textContent = dados.camera
+        document.getElementById('confianca').textContent = dados.confianca
+        document.getElementById('trinca').textContent = dados.trinca
+        document.getElementById('mancha').textContent = dados.mancha
+        document.getElementById('soda').textContent = dados.soda
+        document.getElementById('sujeira').textContent = dados.sujeira
+        document.getElementById('risco').textContent = dados.risco
+        document.getElementById('outros').textContent = dados.outros
+        document.getElementById('marca').textContent = dados.marca
+        document.getElementById('sku').textContent = dados.sku
+        document.getElementById('lote').textContent = dados.lote
+        document.getElementById('envase').textContent = dados.envase
+        document.getElementById('linha').textContent = dados.linha
+        document.getElementById('velocidade').textContent = dados.velocidade + 'un/h'
+        document.getElementById('eficiencia').textContent = dados.eficiencia + '%'
+        document.getElementById('disponibilidade').textContent = dados.disponibilidade + '%'
+        document.getElementById('qualidade').textContent = dados.qualidade + '%'
+        document.getElementById('oee').textContent = dados.oee
+        document.getElementById('mtbf').textContent = dados.mtbf
+        document.getElementById('mttr').textContent = dados.mttr
+
     });

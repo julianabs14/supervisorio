@@ -30,7 +30,28 @@ def status():
     'inicio_parada': converter(aba.cell(row=2, column=6).value),
     'tempo_parado': converter(aba.cell(row=2, column=7).value),
     'media_paradas': converter(aba.cell(row=2, column=8).value),
-    'total_paradas': converter(aba.cell(row=2, column=9).value)
+    'total_paradas': converter(aba.cell(row=2, column=9).value),
+    'status_garrafa': aba.cell(row=2, column=10).value,
+    'camera': aba.cell(row=2, column=11).value,
+    'confianca': aba.cell(row=2, column=12).value,
+    'trinca': aba.cell(row=2, column=13).value,
+    'mancha': aba.cell(row=2, column=14).value,
+    'soda': aba.cell(row=2, column=15).value,
+    'sujeira': aba.cell(row=2, column=16).value,
+    'risco': aba.cell(row=2, column=17).value,
+    'outros': aba.cell(row=2, column=18).value,
+    'marca': aba.cell(row=2, column=19).value,
+    'sku': aba.cell(row=2, column=20).value,
+    'lote': aba.cell(row=2, column=21).value,
+    'envase': converter(aba.cell(row=2, column=22).value),
+    'linha': aba.cell(row=2, column=23).value,
+    'velocidade': aba.cell(row=2, column=24).value,
+    'eficiencia': aba.cell(row=2, column=25).value,
+    'disponibilidade': aba.cell(row=2, column=26).value,
+    'qualidade': aba.cell(row=2, column=27).value,
+    'oee': aba.cell(row=2, column=28).value,
+    'mtbf': converter(aba.cell(row=2, column=28).value),
+    'mttr': converter(aba.cell(row=2, column=29).value)
 
 }
     return jsonify(dados)
