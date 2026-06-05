@@ -1,9 +1,16 @@
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import openpyxl
+from datetime import time, date, datetime
+import re
 
 app = Flask(__name__)
 CORS(app)
+
+def extrairNumero(valor):
+    if not valor:
+        return 0
+    return int(str(valor).split()[0])
 
 @app.route('/app')
 def inicio():
@@ -19,41 +26,67 @@ def status():
     def converter(valor):
         if valor is None:
             return ''
+        if isinstance(valor, (time, date, datetime)):
+            return valor.strftime('%H:%M:%S')
         return str(valor)
 
-    dados = {
-    'status': aba.cell(row=2, column=1).value,
-    'pecas_inspecionadas': aba.cell(row=2, column=2).value,
-    'pecas_aprovadas': aba.cell(row=2, column=3).value,
-    'pecas_rejeitadas': aba.cell(row=2, column=4).value,
-    'taxa_rejeiao': aba.cell(row=2, column=5).value,
-    'inicio_parada': converter(aba.cell(row=2, column=6).value),
-    'tempo_parado': converter(aba.cell(row=2, column=7).value),
-    'media_paradas': converter(aba.cell(row=2, column=8).value),
-    'total_paradas': converter(aba.cell(row=2, column=9).value),
-    'status_garrafa': aba.cell(row=2, column=10).value,
-    'camera': aba.cell(row=2, column=11).value,
-    'confianca': aba.cell(row=2, column=12).value,
-    'trinca': aba.cell(row=2, column=13).value,
-    'mancha': aba.cell(row=2, column=14).value,
-    'soda': aba.cell(row=2, column=15).value,
-    'sujeira': aba.cell(row=2, column=16).value,
-    'risco': aba.cell(row=2, column=17).value,
-    'outros': aba.cell(row=2, column=18).value,
-    'marca': aba.cell(row=2, column=19).value,
-    'sku': aba.cell(row=2, column=20).value,
-    'lote': aba.cell(row=2, column=21).value,
-    'envase': converter(aba.cell(row=2, column=22).value),
-    'linha': aba.cell(row=2, column=23).value,
-    'velocidade': converter(aba.cell(row=2, column=24).value),
-    'eficiencia': aba.cell(row=2, column=25).value,
-    'disponibilidade': aba.cell(row=2, column=26).value,
-    'qualidade': aba.cell(row=2, column=27).value,
-    'oee': aba.cell(row=2, column=28).value,
-    'mtbf': converter(aba.cell(row=2, column=28).value),
-    'mttr': converter(aba.cell(row=2, column=29).value)
+    falhas_brutas = {
+        'Trinca': aba.cell(row=2, column=13).value or '',
+        'Mancha': aba.cell(row=2, column=14).value or '',
+        'Soda': aba.cell(row=2, column=15).value or '',
+        'Sujeira': aba.cell(row=2, column=16).value or '',
+        'Risco': aba.cell(row=2, column=17).value or '',
+        'Outro': aba.cell(row=2, column=18).value or '',
+    }
 
-}
+    falhas_ordenadas = sorted(falhas_brutas.items(), key=lambda x: extrairNumero(x[1]), reverse=True)
+
+    dados = {
+        'status': aba.cell(row=2, column=1).value,
+        'pecas_inspecionadas': aba.cell(row=2, column=2).value,
+        'pecas_aprovadas': aba.cell(row=2, column=3).value,
+        'pecas_rejeitadas': aba.cell(row=2, column=4).value,
+        'taxa_rejeiao': aba.cell(row=2, column=5).value,
+        'inicio_parada': converter(aba.cell(row=2, column=6).value),
+        'tempo_parado': converter(aba.cell(row=2, column=7).value),
+        'media_paradas': converter(aba.cell(row=2, column=8).value),
+        'total_paradas': converter(aba.cell(row=2, column=9).value),
+        'status_garrafa': aba.cell(row=2, column=10).value,
+        'camera': aba.cell(row=2, column=11).value,
+        'confianca': aba.cell(row=2, column=12).value,
+        'marca': aba.cell(row=2, column=19).value,
+        'sku': aba.cell(row=2, column=20).value,
+        'lote': aba.cell(row=2, column=21).value,
+        'envase': converter(aba.cell(row=2, column=22).value),
+        'linha': aba.cell(row=2, column=23).value,
+        'velocidade': converter(aba.cell(row=2, column=24).value),
+        'eficiencia': aba.cell(row=2, column=25).value,
+        'disponibilidade': aba.cell(row=2, column=26).value,
+        'opi': aba.cell(row=2, column=27).value,
+        'oee': aba.cell(row=2, column=28).value + '%',
+        'mtbf': converter(aba.cell(row=2, column=28).value),
+        'mttr': converter(aba.cell(row=2, column=29).value),
+        'total_cameras': aba.cell(row=2, column=34).value,
+        'total_triggers': aba.cell(row=2, column=35).value,
+        'temperatura': converter(aba.cell(row=2, column=36).value),
+        'iluminacao': aba.cell(row=2, column=37).value,
+        'comunicacao': aba.cell(row=2, column=38).value,
+        'alertas': [
+            {
+                'hora': converter(aba.cell(row=i, column=31).value),
+                'evento': converter(aba.cell(row=i, column=32).value),
+                'causa': converter(aba.cell(row=i, column=33).value)
+            }
+            for i in range(2, 7)
+        ],
+        'falhas_brutas': falhas_brutas,
+        'falhas_ordenadas': falhas_ordenadas,
+        'top_falhas': [
+            {'nome': nome, 'valor': valor}
+            for nome, valor in falhas_ordenadas
+        ]
+    }
+
     return jsonify(dados)
 
 if __name__ == '__main__':
