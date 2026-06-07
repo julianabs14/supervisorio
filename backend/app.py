@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, request
 from flask_cors import CORS
 import openpyxl
 from datetime import time, date, datetime
@@ -63,7 +63,7 @@ def status():
         'eficiencia': aba.cell(row=2, column=25).value,
         'disponibilidade': aba.cell(row=2, column=26).value,
         'opi': aba.cell(row=2, column=27).value,
-        'oee': aba.cell(row=2, column=28).value + '%',
+        'oee': converter(aba.cell(row=2, column=28).value) + '%',
         'mtbf': converter(aba.cell(row=2, column=28).value),
         'mttr': converter(aba.cell(row=2, column=29).value),
         'total_cameras': aba.cell(row=2, column=34).value,
@@ -88,6 +88,55 @@ def status():
     }
 
     return jsonify(dados)
+
+@app.route('/cadastro', methods=['POST'])
+def cadastro():
+    if request.method == 'OPTIONS':
+        return '', 204
+
+    dados = request.get_json(force=True)
+    print(dados)
+    print(type(dados))
+
+    if isinstance(dados, list):
+        dados = dados[0]
+
+    nome = str(dados['nome'])
+    usuario = str(['usuario'])
+    senha = str(dados['senha'])
+
+    baseDados = openpyxl.load_workbook('dados.xlsx')
+    aba_usuarios = baseDados['usuarios']
+
+    for linha in aba_usuarios.iter_rows(min_row=2, values_only=True):
+        if linha[1] == usuario:
+            return jsonify({'Sucesso': False, 'mensagem': 'Usuário já existe'})
+        
+    aba_usuarios.append([nome, usuario, senha])
+    baseDados.save('dados.xlsx')
+
+    return jsonify({'Sucesso': True, 'mensagem': 'Cadastro realizado'})
+
+@app.route('/login', methods=['POST'])
+def login():
+    if request.method == 'OPTIONS':
+        return '', 204
+
+    dados = request.get_json(force=True)
+    print(dados)
+
+    usuario_digitado = str(dados['usuario'])
+    senha_digitada = str(dados['senha'])
+
+    basedados = openpyxl.load_workbook('dados.xlsx')
+    aba_usuarios = basedados['usuarios']
+
+    for linha in aba_usuarios.iter_rows(min_row=2, values_only=True):
+        nome, usuario, senha = linha
+        if usuario == usuario_digitado and senha == senha_digitada == senha_digitada:
+            return jsonify({'sucesso': True, 'nome': nome})
+    
+    return jsonify({'Sucesso':False, 'mensagem':'Usuário ou senha incorretos'})
 
 if __name__ == '__main__':
     app.run(debug=True)

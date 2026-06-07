@@ -1,9 +1,6 @@
 //login tempóraio, array de objetos
 
-const usuarios = [
-    { usuario: 'admin', senha: '1234', nome: 'Administrador'},
-    { usuario: 'tecnico', senha: 'senai', nome: 'Técnico I'}
-];
+const usuarios = [];
 
 const formLogin = document.getElementById('form-login');
 
@@ -13,15 +10,20 @@ formLogin.addEventListener('submit', function(evento) {
     const digitouUsuario = document.getElementById('usuario').value; 
     const digitouSenha = document.getElementById('senha').value;
 
-    const encontrado = usuarios.find(function(item) {
-        return item.usuario === digitouUsuario && item.senha === digitouSenha;
-    });
-
-    if (encontrado) {
-        alert('Bem-vindo, ' + encontrado.nome);
-        localStorage.setItem('usuarioLogado', encontrado.nome)
-        window.location.href = 'supervisorio.html'
-    } else {
-        alert('Usuário ou senha incorretos');
+   fetch('http://127.0.0.1:5000/login', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({usuario: digitouUsuario, senha: digitouSenha})
+   })
+   .then(function(resposta){
+        return resposta.json()
+   })
+   .then(function(dados){
+    if (dados.sucesso) {
+        localStorage.setItem('usuarioLogado', dados.nome)
+        window.location.href ='supervisorio.html'
+    }  else  {
+        alert(dados.mensgem)
     }
+   })
 });
