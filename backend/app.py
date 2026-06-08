@@ -21,7 +21,7 @@ def status():
 
     base_de_dados = openpyxl.load_workbook('dados.xlsx')
 
-    aba = base_de_dados.active
+    aba = base_de_dados['Planilha1']
 
     def converter(valor):
         if valor is None:
@@ -102,7 +102,7 @@ def cadastro():
         dados = dados[0]
 
     nome = str(dados['nome'])
-    usuario = str(['usuario'])
+    usuario = str(dados['usuario'])
     senha = str(dados['senha'])
 
     baseDados = openpyxl.load_workbook('dados.xlsx')
@@ -110,12 +110,12 @@ def cadastro():
 
     for linha in aba_usuarios.iter_rows(min_row=2, values_only=True):
         if linha[1] == usuario:
-            return jsonify({'Sucesso': False, 'mensagem': 'Usuário já existe'})
+            return jsonify({'sucesso': False, 'mensagem': 'Usuário já existe'})
         
     aba_usuarios.append([nome, usuario, senha])
     baseDados.save('dados.xlsx')
 
-    return jsonify({'Sucesso': True, 'mensagem': 'Cadastro realizado'})
+    return jsonify({'sucesso': True, 'mensagem': 'Cadastro realizado'})
 
 @app.route('/login', methods=['POST'])
 def login():

@@ -23,7 +23,7 @@ formLogin.addEventListener('submit', function(evento) {
         localStorage.setItem('usuarioLogado', dados.nome)
         window.location.href ='supervisorio.html'
     }  else  {
-        alert(dados.mensgem)
+        alert(dados.mensagem)
     }
    })
 });
