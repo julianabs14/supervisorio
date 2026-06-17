@@ -33,7 +33,7 @@ def status():
     falhas_brutas = {
         'Trinca': aba.cell(row=2, column=13).value or '',
         'Mancha': aba.cell(row=2, column=14).value or '',
-        'Soda': aba.cell(row=2, column=15).value or '',
+        'Soda cáustica': aba.cell(row=2, column=15).value or '',
         'Sujeira': aba.cell(row=2, column=16).value or '',
         'Risco': aba.cell(row=2, column=17).value or '',
         'Outro': aba.cell(row=2, column=18).value or '',
