@@ -1,22 +1,70 @@
+import sqlite3
 from flask import Flask, jsonify, send_from_directory, request
 from flask_cors import CORS
-import openpyxl
-from datetime import time, date, datetime
+import datetime
 import re
+import bcrypt
+import jwt
+from dotenv import load_dotenv
+import os
+from functools import wraps
+
+load_dotenv()
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+def init_db():
+    conexao = sqlite3.connect('tecnosensor.db')
+    cursor = conexao.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXIST usuarios(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        usuario TEXT UNIQUE NOT NULL,
+        nome TEXT NOT NULL,
+        senha TEXT NOT NULL
+        )
+    ''')
+
+    conexao.commit()
+    conexao.close()
+
+def criar_hash_senha(senha):
+    senha_bytes = senha.encode('utf-8')
+    hash_gerado = bcrypt.hashpw(senha_bytes, bcrypt.gensalt())
+    return hash_gerado('utf-8')
+
+def verificar_senha(senha_digitada, hash_salvo):
+    senha_bytes = senha_digitada.encode('utf-8')
+    hash_bytes = hash_salvo.encode('utf-8')
+    return bcrypt.checkpw(senha_bytes, hash_bytes)
+
+def token_obrigatorio(funcao):
+    @wraps(funcao)
+
+    def decorador(*args, **kwargs):
+        token = request.headers.get('Authorization')
+
+        if not token:
+            return jsonify({'mensagem': 'Token não fornecido!'}), 401
+        
+        try:
+            jwt.decode(token, SECRET_KEY, algorithms='HS256')
+        except jwt.ExpiredSignatureError:
+            return jsonify({'mensagem': 'Token expirado'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'mensagem': 'Token inválida'}), 401
+        
+    return decorador
 
 app = Flask(__name__)
 CORS(app)
-
-def extrairNumero(valor):
-    if not valor:
-        return 0
-    return int(str(valor).split()[0])
 
 @app.route('/app')
 def inicio():
     return send_from_directory('../frontend', 'supervisorio.html')
 
 @app.route('/status')
+@token_obrigatorio
 def status():
 
     base_de_dados = openpyxl.load_workbook('dados.xlsx')
@@ -95,27 +143,36 @@ def cadastro():
         return '', 204
 
     dados = request.get_json(force=True)
-    print(dados)
-    print(type(dados))
-
-    if isinstance(dados, list):
-        dados = dados[0]
 
     nome = str(dados['nome'])
     usuario = str(dados['usuario'])
     senha = str(dados['senha'])
 
-    baseDados = openpyxl.load_workbook('dados.xlsx')
-    aba_usuarios = baseDados['usuarios']
+    if not nome or not usuario or not senha:
+        return jsonify({'sucesso': False, 'mensagem': 'Todos os campos são obrigatórios! '}), 400
+    
+    if len(senha) < 6:
+        return jsonify({'sucesso': False, 'mensagem': 'A senha deve ter ao menos 6 caracteres! '}), 400
+    
+    senha_hash = criar_hash_senha(senha)
 
-    for linha in aba_usuarios.iter_rows(min_row=2, values_only=True):
-        if linha[1] == usuario:
-            return jsonify({'sucesso': False, 'mensagem': 'Usuário já existe'})
-        
-    aba_usuarios.append([nome, usuario, senha])
-    baseDados.save('dados.xlsx')
+    try:
+        conexao = sqlite3.connect('technosesnor.db')
+        cursor = conexao.cursor()
 
-    return jsonify({'sucesso': True, 'mensagem': 'Cadastro realizado'})
+        cursor.execute('''
+            INSERT INTO (nome, usuario, senha),
+            VALUES(?, ?, ?)
+
+        ''', (nome, usuario, senha_hash))
+
+        conexao.commit()
+        conexao.close()
+
+        return jsonify({'sucesso': True, 'mensagem': 'Cadastro realizado com sucesso! '})
+    
+    except sqlite3.IntegrityError:
+        return jsonify({'sucesso': False, 'mensagem': 'Usuário já existe!'}), 409
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -123,20 +180,38 @@ def login():
         return '', 204
 
     dados = request.get_json(force=True)
-    print(dados)
 
-    usuario_digitado = str(dados['usuario'])
-    senha_digitada = str(dados['senha'])
+    usuario = usuario.get('usuario')
+    senha =senha.get('senha')
 
-    basedados = openpyxl.load_workbook('dados.xlsx')
-    aba_usuarios = basedados['usuarios']
-
-    for linha in aba_usuarios.iter_rows(min_row=2, values_only=True):
-        nome, usuario, senha = linha
-        if usuario == usuario_digitado and senha == senha_digitada == senha_digitada:
-            return jsonify({'sucesso': True, 'nome': nome})
+    if not usuario or not senha:
+        return jsonify({'sucesso': False, 'mensagem': 'Usuário e senha são obrigatórios! '}), 400
     
-    return jsonify({'Sucesso':False, 'mensagem':'Usuário ou senha incorretos'})
+    conexao = sqlite3.connect('technosensor.db')
+    cursor = conexao.cursor()
+
+    cursor.execute('SELECT nome, senha FROM usuarios WHERE usuario = ?', (usuario,))
+
+    resultado = cursor.fetchone()
+    conexao.close()
+
+    if resultado is None:
+        return jsonify({'sucesso': False, 'mensagem': 'Usuário ou senha incorretos'}), 401
+    
+    nome_encontrado, senha_hash_salva = resultado
+
+    if not verificar_senha(senha, senha_hash_salva):
+        return jsonify({'sucesso': False, 'mensagem': 'Usuário ou senha incorretos'}), 401
+    
+    payload = {
+        'usuario': usuario,
+        'nome': nome_encontrado,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=8)
+    }
+
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    
+    return jsonify({'sucesso': True, 'nome': nome_encontrado, 'token': token })
 
 if __name__ == '__main__':
     app.run(debug=True)

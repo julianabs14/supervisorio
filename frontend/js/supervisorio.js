@@ -1,4 +1,3 @@
-//navegação 
 const usuarioLogado = localStorage.getItem('usuarioLogado');
 
 if (!usuarioLogado) {
@@ -31,13 +30,26 @@ botoes.forEach(function(botao){
 });
 
 document.getElementById('btn-logout').addEventListener('click', function() {
-    localStorage.removeItem('usuarioLogado')
+    localStorage.clear()
     window.location.href = 'index.html'
 });
 
-fetch('http://127.0.0.1:5000/status')
-    .then(function(resposta) {
-        return resposta.json();
+const token = localStorage.getItem('token')
+
+fetch('http://127.0.0.1:5000/status', {
+    method: 'GET',
+    headers:{
+        'Authorization': token,
+        'Content-Type': 'application/json'
+    }    
+})
+    .then(function(resposta){
+        if (resposta.status === 401) {
+            localStorage.clear()
+            window.location.href('index.html')
+        }
+    return resposta.json()
+
     })
     .then(function(dados) {
         document.querySelector('.status-texto').textContent = dados.status;

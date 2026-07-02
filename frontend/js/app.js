@@ -1,5 +1,3 @@
-//login tempóraio, array de objetos
-
 const usuarios = [];
 
 const formLogin = document.getElementById('form-login');
@@ -21,6 +19,7 @@ formLogin.addEventListener('submit', function(evento) {
    .then(function(dados){
     if (dados.sucesso) {
         localStorage.setItem('usuarioLogado', dados.nome)
+        localStorage.setItem('token', dados.token)
         window.location.href ='supervisorio.html'
     }  else  {
         alert(dados.mensagem)

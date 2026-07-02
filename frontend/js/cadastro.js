@@ -8,6 +8,11 @@ formCadastro.addEventListener('submit', function(evento) {
     const senha = document.getElementById('nova-senha').value
     const confirma = document.getElementById('confirmar-senha').value
 
+    if (senha < 6) {
+        alert('A senha deve ter ao menos 6 caracteres')
+        return
+    }
+    
     if (senha !== confirma) {
         alert('As senhas não coincidem!');
         return

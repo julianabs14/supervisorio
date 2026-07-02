@@ -18,10 +18,35 @@
                 </div>
 
             <form id="form-cadastro">
-                <input class="campo" type="text" id="nome" placeholder="Nome completo">
-                <input class="campo" type="text" id="novo-usuario" placeholder="Usuário">
-                <input class="campo" type="password" id="nova-senha" placeholder="Senha">
-                <input class="campo" type="password" id="confirmar-senha" placeholder="Confirmar senha">
+                <input
+                class="campo" 
+                type="text" 
+                id="nome" 
+                placeholder="Nome completo"
+                >
+                <input 
+                class="campo"
+                type="text" 
+                id="novo-usuario" 
+                placeholder="Usuário"
+                >
+                <input
+                    class="campo" 
+                    type="password" 
+                    id="nova-senha"
+                    minlength="6"
+                    placeholder="Senha"
+                    required
+                >
+                <input
+                class="campo" 
+                type="password" 
+                id="confirmar-senha"
+                minlength="6"
+                placeholder="Confirmar senha"
+                required
+                >
+
                 <button type="submit">Cadastrar</button>
             </form>
 
