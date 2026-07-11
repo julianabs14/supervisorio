@@ -13,25 +13,141 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 def init_db():
-    conexao = sqlite3.connect('tecnosensor.db')
+    conexao = sqlite3.connect('technosensor.db')
     cursor = conexao.cursor()
 
     cursor.execute('''
-        CREATE TABLE IF NOT EXIST usuarios(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        usuario TEXT UNIQUE NOT NULL,
-        nome TEXT NOT NULL,
-        senha TEXT NOT NULL
+        CREATE TABLE IF NOT EXISTS usuarios(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario TEXT UNIQUE NOT NULL,
+            nome TEXT NOT NULL,
+            senha TEXT NOT NULL
         )
     ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS dados_maquina(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            status TEXT NOT NULL,
+            pecas_inspecionadas INTEGER,
+            pecas_aprovadas INTEGER,
+            pecas_rejeitadas INTEGER,
+            taxa_rejeicao REAL,
+            inicio_parada TEXT,
+            tempo_parada TEXT,
+            media_paradas TEXT,
+            status_falha TEXT,
+            camera TEXT,
+            confianca TEXT,
+            marca TEXT,
+            sku TEXT,
+            lote TEXT,
+            envase TEXT,
+            linha TEXT,
+            velocidade TEXT,
+            eficiencia REAL,
+            disponibilidade REAL,
+            qualidade REAL,
+            oee REAL,
+            mtbf TEXT,
+            mttr TEXT,
+            total_cameras INTEGER,
+            total_triggers INTEGER,
+            temperatura TEXT,
+            iluminacao TEXT,
+            comunicao TEXT
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS alertas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            hora TEXT,
+            evento TEXT,
+            causa TEXT
+        )
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS falhas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT,
+            valor TEXT
+        )
+    ''')
+
+    cursor.execute('SELECT COUNT(*) FROM dados_maquina')
+    if cursor.fetchone()[0] == 0:
+        cursor.execute('''
+            INSERT INTO dados_maquina VALUES (
+                1,
+                'EM OPERAÇÃO',
+                9842, 
+                9102, 
+                740, 
+                7.35,
+                '14:25:47',
+                '00:06:45', 
+                '00:07:35',
+                'GARRAFA TRINCADA',
+                'Câmera: CO3 - LATERAL',
+                'Confiança: 94%',
+                'CERVEJA TIPO B', 
+                '600ml',
+                'L150214D',
+                '30/07/2026 9:15',
+                'LINHA 15', 
+                '24.000 un/h',
+                91.4,
+                70.7,
+                95.2,
+                70.8,
+                '03:45:18',
+                '00:08:35',
+                5,
+                5,
+                '32,5°C',
+                'OK',
+                'OK'
+            )
+        ''')
+
+    cursor.execute('SELECT COUNT(*) FROM alertas')
+    if cursor.fetchone()[0] == 0:
+        cursor.executemany(
+            'INSERT INTO alertas (hora, evento, causa) VALUES (?, ?, ?)',
+            [
+                ('14:10:11', 'Garrafa trincada', 'Trinca no corpo'),
+                ('15:30:02', 'Garrafa trincada0', 'TRinca no ombro'),
+                ('15:31:48', 'Garrafa com mancha', 'Mancha marrom'),
+                ('16:31:48', 'Soda cáustica', 'Resíduo de soda'),
+                ('16:32:40', 'Garrafa suja', 'Sujeira no corpo')
+            ]
+        )
+
+    cursor.execute('SELECT COUNT(*) FROM falhas')
+    if cursor.fetchone()[0] == 0:
+        cursor.executemany(
+            'INSERT INTO falhas (nome, valor) VALUES (?, ?)',
+            [
+                ('Trinca', '190 (43%)'),
+                ('Mancha', '195 44%'),
+                ('Soda cáustica', '64 (14,8%)'),
+                ('Sujeira', '51 (11,8%)'),
+                ('Risco', '31 (7,0%)'),
+                ('Outros', '12 (8,8%)')
+            ]
+        )
 
     conexao.commit()
     conexao.close()
 
+init_db()
+
 def criar_hash_senha(senha):
     senha_bytes = senha.encode('utf-8')
     hash_gerado = bcrypt.hashpw(senha_bytes, bcrypt.gensalt())
-    return hash_gerado('utf-8')
+    return hash_gerado.decode('utf-8')
 
 def verificar_senha(senha_digitada, hash_salvo):
     senha_bytes = senha_digitada.encode('utf-8')
@@ -48,12 +164,14 @@ def token_obrigatorio(funcao):
             return jsonify({'mensagem': 'Token não fornecido!'}), 401
         
         try:
-            jwt.decode(token, SECRET_KEY, algorithms='HS256')
+            jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
         except jwt.ExpiredSignatureError:
             return jsonify({'mensagem': 'Token expirado'}), 401
         except jwt.InvalidTokenError:
             return jsonify({'mensagem': 'Token inválida'}), 401
         
+        return funcao(*args, **kwargs)
+    
     return decorador
 
 app = Flask(__name__)
@@ -67,75 +185,31 @@ def inicio():
 @token_obrigatorio
 def status():
 
-    base_de_dados = openpyxl.load_workbook('dados.xlsx')
+    conexao = sqlite3.connect('technosensor.db')
+    cursor = conexao.cursor()
 
-    aba = base_de_dados['Planilha1']
+    cursor.execute('SELECT * FROM dados_maquina WHERE id = 1')
+    linha = cursor.fetchone()
 
-    def converter(valor):
-        if valor is None:
-            return ''
-        if isinstance(valor, (time, date, datetime)):
-            return valor.strftime('%H:%M:%S')
-        return str(valor)
+    colunas = [descricao[0] for descricao in cursor.description]
+    dados = dict(zip(colunas, linha))
 
-    falhas_brutas = {
-        'Trinca': aba.cell(row=2, column=13).value or '',
-        'Mancha': aba.cell(row=2, column=14).value or '',
-        'Soda cáustica': aba.cell(row=2, column=15).value or '',
-        'Sujeira': aba.cell(row=2, column=16).value or '',
-        'Risco': aba.cell(row=2, column=17).value or '',
-        'Outro': aba.cell(row=2, column=18).value or '',
-    }
+    cursor.execute('SELECT hora, evento, causa FROM alertas')
+    dados['alertas'] = [
+        {'hora': row[0], 'evento': row[1], 'causa': row[2]}
+        for row in cursor.fetchall()
+    ]
 
-    falhas_ordenadas = sorted(falhas_brutas.items(), key=lambda x: extrairNumero(x[1]), reverse=True)
+    cursor.execute('SELECT nome, valor FROM falhas')
+    dados['top_falhas'] = [
+        {'nome': row[0], 'valor': row[1]}
+        for row in cursor.fetchall()
+    ]
 
-    dados = {
-        'status': aba.cell(row=2, column=1).value,
-        'pecas_inspecionadas': aba.cell(row=2, column=2).value,
-        'pecas_aprovadas': aba.cell(row=2, column=3).value,
-        'pecas_rejeitadas': aba.cell(row=2, column=4).value,
-        'taxa_rejeiao': aba.cell(row=2, column=5).value,
-        'inicio_parada': converter(aba.cell(row=2, column=6).value),
-        'tempo_parado': converter(aba.cell(row=2, column=7).value),
-        'media_paradas': converter(aba.cell(row=2, column=8).value),
-        'total_paradas': converter(aba.cell(row=2, column=9).value),
-        'status_garrafa': aba.cell(row=2, column=10).value,
-        'camera': aba.cell(row=2, column=11).value,
-        'confianca': converter(aba.cell(row=2, column=12).value),
-        'marca': aba.cell(row=2, column=19).value,
-        'sku': aba.cell(row=2, column=20).value,
-        'lote': aba.cell(row=2, column=21).value,
-        'envase': converter(aba.cell(row=2, column=22).value),
-        'linha': aba.cell(row=2, column=23).value,
-        'velocidade': converter(aba.cell(row=2, column=24).value),
-        'eficiencia': aba.cell(row=2, column=25).value,
-        'disponibilidade': aba.cell(row=2, column=26).value,
-        'opi': aba.cell(row=2, column=27).value,
-        'oee': converter(aba.cell(row=2, column=28).value) + '%',
-        'mtbf': converter(aba.cell(row=2, column=29).value),
-        'mttr': converter(aba.cell(row=2, column=30).value),
-        'total_cameras': aba.cell(row=2, column=34).value,
-        'total_triggers': aba.cell(row=2, column=35).value,
-        'temperatura': converter(aba.cell(row=2, column=36).value),
-        'iluminacao': aba.cell(row=2, column=37).value,
-        'comunicacao': aba.cell(row=2, column=38).value,
-        'alertas': [
-            {
-                'hora': converter(aba.cell(row=i, column=31).value),
-                'evento': converter(aba.cell(row=i, column=32).value),
-                'causa': converter(aba.cell(row=i, column=33).value)
-            }
-            for i in range(2, 7)
-        ],
-        'falhas_brutas': falhas_brutas,
-        'falhas_ordenadas': falhas_ordenadas,
-        'top_falhas': [
-            {'nome': nome, 'valor': valor}
-            for nome, valor in falhas_ordenadas
-        ]
-    }
-
+    conexao.close()
     return jsonify(dados)
+
+    
 
 @app.route('/cadastro', methods=['POST'])
 def cadastro():
@@ -157,11 +231,11 @@ def cadastro():
     senha_hash = criar_hash_senha(senha)
 
     try:
-        conexao = sqlite3.connect('technosesnor.db')
+        conexao = sqlite3.connect('technosensor.db')
         cursor = conexao.cursor()
 
         cursor.execute('''
-            INSERT INTO (nome, usuario, senha),
+            INSERT INTO usuarios (nome, usuario, senha)
             VALUES(?, ?, ?)
 
         ''', (nome, usuario, senha_hash))
@@ -181,8 +255,8 @@ def login():
 
     dados = request.get_json(force=True)
 
-    usuario = usuario.get('usuario')
-    senha =senha.get('senha')
+    usuario = dados.get('usuario')
+    senha = dados.get('senha')
 
     if not usuario or not senha:
         return jsonify({'sucesso': False, 'mensagem': 'Usuário e senha são obrigatórios! '}), 400
