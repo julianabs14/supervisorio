@@ -46,7 +46,7 @@ fetch('http://127.0.0.1:5000/status', {
     .then(function(resposta){
         if (resposta.status === 401) {
             localStorage.clear()
-            window.location.href('index.html')
+            window.location.href = 'index.html'
         }
     return resposta.json()
 

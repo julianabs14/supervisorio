@@ -1,4 +1,3 @@
-const usuarios = [];
 
 const formLogin = document.getElementById('form-login');
 
@@ -24,5 +23,9 @@ formLogin.addEventListener('submit', function(evento) {
     }  else  {
         alert(dados.mensagem)
     }
+   })
+   .catch(function(erro){
+    alert('Erro de conexão.')
+    console.error(erro)
    })
 });
