@@ -34,9 +34,10 @@ def init_db():
             pecas_rejeitadas INTEGER,
             taxa_rejeicao REAL,
             inicio_parada TEXT,
-            tempo_parada TEXT,
+            tempo_parado TEXT,
             media_paradas TEXT,
-            status_falha TEXT,
+            status_garrafa TEXT,
+            total_paradas INTEGER,
             camera TEXT,
             confianca TEXT,
             marca TEXT,
@@ -47,7 +48,7 @@ def init_db():
             velocidade TEXT,
             eficiencia REAL,
             disponibilidade REAL,
-            qualidade REAL,
+            opi REAL,
             oee REAL,
             mtbf TEXT,
             mttr TEXT,
@@ -55,7 +56,7 @@ def init_db():
             total_triggers INTEGER,
             temperatura TEXT,
             iluminacao TEXT,
-            comunicao TEXT
+            comunicacao TEXT
         )
     ''')
 
@@ -82,21 +83,22 @@ def init_db():
             INSERT INTO dados_maquina VALUES (
                 1,
                 'EM OPERAÇÃO',
-                9842, 
-                9102, 
-                740, 
+                9842,
+                9102,
+                740,
                 7.35,
                 '14:25:47',
-                '00:06:45', 
+                '00:06:45',
                 '00:07:35',
                 'GARRAFA TRINCADA',
-                'Câmera: CO3 - LATERAL',
+                4,
+                'Câmera: CO3 - Lateral',
                 'Confiança: 94%',
-                'CERVEJA TIPO B', 
+                'CERVEJA TIPO B',
                 '600ml',
                 'L150214D',
-                '30/07/2026 9:15',
-                'LINHA 15', 
+                '30/07/2026 09:15',
+                'LINHA 15',
                 '24.000 un/h',
                 91.4,
                 70.7,
@@ -109,8 +111,8 @@ def init_db():
                 '32,5°C',
                 'OK',
                 'OK'
-            )
-        ''')
+                )
+            ''')
 
     cursor.execute('SELECT COUNT(*) FROM alertas')
     if cursor.fetchone()[0] == 0:

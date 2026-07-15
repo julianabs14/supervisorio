@@ -53,10 +53,10 @@ fetch('http://127.0.0.1:5000/status', {
     })
     .then(function(dados) {
         document.querySelector('.status-texto').textContent = dados.status;
-        document.getElementById('pecas-inspecionadas').textContent = dados.pecas_inspecionadas + ' unidades';
+        document.getElementById('pecas-inspecionadas').textContent = dados.pecas_inspecionadas  + ' unidades';
         document.getElementById('pecas-aprovadas').textContent = dados.pecas_aprovadas + ' unidades';
         document.getElementById('pecas-rejeitadas').textContent = dados.pecas_rejeitadas + ' unidades';
-        document.getElementById('taxa-rejeicao').textContent = dados.taxa_rejeiao + '%';
+        document.getElementById('taxa-rejeicao').textContent = dados.taxa_rejeicao+ '%';
         document.getElementById('inicio-parada').textContent = dados.inicio_parada + ' Hrs';
         document.getElementById('tempo-parado').textContent = dados.tempo_parado + ' Hrs';
         document.getElementById('media-paradas').textContent = dados.media_paradas + ' Hrs';
@@ -89,12 +89,12 @@ fetch('http://127.0.0.1:5000/status', {
         document.getElementById('eficiencia').textContent = dados.eficiencia + '%';
         document.getElementById('disponibilidade').textContent = dados.disponibilidade + '%';
         document.getElementById('opi').textContent = dados.opi + '%';
-        document.getElementById('oee').textContent = dados.oee;
+        document.getElementById('oee').textContent = dados.oee + '%';
         document.getElementById('mtbf').textContent = dados.mtbf + ' Hrs';
         document.getElementById('mttr').textContent = dados.mttr + ' Hrs';
         document.getElementById('total-cameras').textContent = dados.total_cameras;
         document.getElementById('total-triggers').textContent = dados.total_triggers;
-        document.getElementById('temperatura').textContent = dados.temperatura + '℃';
+        document.getElementById('temperatura').textContent = dados.temperatura;
         document.getElementById('iluminacao').textContent = dados.iluminacao;
         document.getElementById('comunicacao').textContent = dados.comunicacao;
 
