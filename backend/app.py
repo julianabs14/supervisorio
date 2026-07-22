@@ -8,6 +8,8 @@ import jwt
 from dotenv import load_dotenv
 import os
 from functools import wraps
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -179,6 +181,13 @@ def token_obrigatorio(funcao):
 app = Flask(__name__)
 CORS(app)
 
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["200 per day", "50 per hour"],
+    storage_uri="memory://"
+)
+
 @app.route('/app')
 def inicio():
     return send_from_directory('../frontend', 'supervisorio.html')
@@ -214,6 +223,7 @@ def status():
     
 
 @app.route('/cadastro', methods=['POST'])
+@limiter.limit("3 per minute")
 def cadastro():
     if request.method == 'OPTIONS':
         return '', 204
@@ -251,6 +261,7 @@ def cadastro():
         return jsonify({'sucesso': False, 'mensagem': 'Usuário já existe!'}), 409
 
 @app.route('/login', methods=['POST'])
+@limiter.limit("5 per minute")
 def login():
     if request.method == 'OPTIONS':
         return '', 204
