@@ -257,3 +257,14 @@ body {
     }
 
 }
+
+#card-grafico {
+    grid-column: 1 / -1;
+    padding-bottom: 12px;
+    margin-bottom: 22px;
+}
+
+#card-grafico canvas {
+    height: 120px !important;
+    width: 100% !important;
+}

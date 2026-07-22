@@ -6,6 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Supervisório IGV</title>
         <link rel="stylesheet" href="css/supervisorio.css">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
 
     <body>
@@ -79,6 +80,11 @@
                         <span>Total de Paradas </span>
                         <span class="valor" id="total-paradas">4</span>
                     </div>
+                </section>
+
+                <section class="card" id="card-grafico">
+                    <p class="card-titulo">MTBF vs MTTR</p>
+                    <canvas id="grafico-mtbf-mttr" height="120"></canvas>
                 </section>
             </div>
 

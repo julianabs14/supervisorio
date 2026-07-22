@@ -105,6 +105,73 @@ fetch('http://127.0.0.1:5000/status', {
             linhas[index].querySelector('.hora').textContent = alerta.hora;
             linhas[index].querySelector('.evento').textContent = alerta.evento;
             linhas[index].querySelector('.causa').textContent = alerta.causa;
-        });
+        })
 
+        function horasParaMinutos(tempo) {
+            if (!tempo) return 0
+            const partes = tempo.split(':')
+            return parseInt(partes[0]) * 60 + parseInt(partes[1])
+        }
+
+        const mtbfMinutos = horasParaMinutos(dados.mtbf)
+        const mttrMinutos = horasParaMinutos(dados.mttr)
+
+        const ctx = document.getElementById('grafico-mtbf-mttr').getContext('2d')
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['MTBF', 'MTTR'],
+                datasets: [{
+                    label: 'Minutos',
+                    data: [mtbfMinutos, mttrMinutos],
+                    backgroundColor: [
+                        'rgba(41, 121, 255, 0.7)',
+                        'rgba(168, 85, 247, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(41, 121, 255, 1)',
+                        'rgba(168, 85, 247, 0.7)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 6
+                }]
+            },
+            options:{
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false},
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const minutos = context.raw
+                                const h = Math.floor(minutos / 60)
+                                const m = minutos % 60
+                                return `${h}h ${m}min`                          }
+                        }
+                    }
+                }
+            },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#ffffff',
+                            font: {size: 13},
+                            callback: function(value) {
+                                return value + ' min'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(30, 45, 90, 0.8)'
+                        }
+                    },
+                x: {
+                    ticks: { color: '#ffffff'},
+                    grid: {display: false}
+                }
+            }
+        })
     });
