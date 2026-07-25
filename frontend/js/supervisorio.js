@@ -175,3 +175,29 @@ fetch('http://127.0.0.1:5000/status', {
             }
         })
     });
+
+document.getElementById('btn-relatorio').addEventListener('click', function(){
+    const token = localStorage.getItem('token')
+
+    fetch('http://127.0.0.1:5000/relatorio', {
+        method: 'GET',
+        headers:  { 'Authorization': token }
+    })
+    .then(function(resposta){
+        if (resposta.status === 401) {
+            localStorage.clear()
+            window.localStorage.href = 'index.html'
+            return
+        }
+        return resposta.blob()
+    })
+    .then(function(blob){
+        if (!blob) return
+        const url = URL.createObjectURL(blob)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = 'relatorio_technosensor.xlsx'
+        link.click()
+        URL.revokeObjectURL(url)
+    })
+});

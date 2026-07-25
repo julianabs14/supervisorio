@@ -268,3 +268,21 @@ body {
     height: 120px !important;
     width: 100% !important;
 }
+
+#btn-relatorio {
+    padding: 10px 20px;
+    background-color: transparent;
+    color: var(--accent);
+    border: 1px solid  var(--accent);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top: 16px;
+    transition: all 0.2s ease;
+    width: auto;
+}
+
+#btn-relatorio:hover {
+    background-color: var(--accent);
+    color: var(--bg);
+}

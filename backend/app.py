@@ -1,15 +1,17 @@
 import sqlite3
-from flask import Flask, jsonify, send_from_directory, request
+from flask import Flask, jsonify, send_from_directory, request, send_file
 from flask_cors import CORS
 import datetime
-import re
 import bcrypt
 import jwt
 from dotenv import load_dotenv
-import os
 from functools import wraps
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import openpyxl
+from openpyxl.styles import Font, PatternFill, Alignment
+import os
+import io
 
 load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -299,6 +301,93 @@ def login():
     token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     
     return jsonify({'sucesso': True, 'nome': nome_encontrado, 'token': token })
+
+@app.route('/relatorio')
+@token_obrigatorio
+def relatorio():
+    conexao = sqlite3.connect('technosensor.db')
+    cursor = conexao.cursor()
+
+    cursor.execute('SELECT * FROM dados_maquina WHERE id = 1')
+    linha = cursor.fetchone()
+    colunas = [d[0] for d in cursor.description]
+    dados = dict(zip(colunas, linha))
+
+    cursor.execute('SELECT nome, valor FROM falhas LIMIT 3')
+    top3_falhas = cursor.fetchall()
+    conexao.close()
+
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = 'Relatório de falhas'
+
+    estilo_cabecalho = Font(bold=True, color='FFFFFF', size=12)
+    fundo_cabecalho = PatternFill(fill_type='solid', fgColor='0F1535')
+    centralizado = Alignment(horizontal='center', vertical='center')
+
+    ws.merge_cells('A1:C1')
+    ws['A1'] = 'Relatório das três principais falhas'
+    ws['A1'].font = Font(bold=True, size=14, color='5B8CFF')
+    ws['A1'].alignment = centralizado
+
+    ws['A2'] = 'Gerado em: '
+    ws['B2'] = datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+
+    ws.append([])
+
+    ws.append(['STATUS DA MÁQUINA'])
+    ws['A4'].font = estilo_cabecalho
+    ws['A4'].fill = fundo_cabecalho
+
+    ws.append(['STATUS', dados.get('status', '')])
+    ws.append(['Peças inspecionadas', dados.get('pecas_inspecionadas', '')])
+    ws.append(['Peças Aprovadas', dados.get('pecas_aprovadas', '')])
+    ws.append(['Peças Rejeitadas', dados.get('pecas_rejeitadas', '')])
+    ws.append(['Taxa de Rejeição', str(dados.get('taxa_rejeicao', '')) + '%'])
+    ws.append(['MTBF', dados.get('mtbf', '')])
+    ws.append(['MTTR', dados.get('mttr', '')])
+
+    ws.append([])
+
+    linha_titulo_falhas = ws.max_row + 1
+    ws.append(['TOP 3 PRINCIPAIS FALHAS'])
+    ws.cell(row=linha_titulo_falhas, column=1).font = estilo_cabecalho
+    ws.cell(row=linha_titulo_falhas, column=1).fill = fundo_cabecalho
+
+    ws.append(['#', 'Tipo de Falha', 'Ocorrências'])
+    linha_cab = ws.max_row
+    for col in range(1, 4):
+        ws.cell(row=linha_cab, column=col).font = Font(bold=True)
+        ws.cell(row=linha_cab, column=col).fill = PatternFill(fill_type='solid', fgColor='1E2D5A')
+        ws.cell(row=linha_cab, column=col).font = Font(bold=True, color='C8D8F0')
+
+    for i, (nome, valor) in enumerate(top3_falhas, start=1):
+        ws.append([i, nome, valor])
+
+    for col_idx, col in enumerate(ws.columns, start=1):
+        largura_max = 0
+        for cell in col:
+            try:
+                if cell.value:
+                    largura_max = max(largura_max, len(str(cell.value)))
+            except:
+                pass
+    letra = openpyxl.utils.get_column_letter(col_idx)
+    ws.column_dimensions[letra].width = largura_max + 4
+    
+    arquivo = io.BytesIO()
+    wb.save(arquivo)
+    arquivo.seek(0)
+
+    nome_arquivo = f'relatorio_technosensor_{datetime.datetime.now().strftime("%Y%m%d_%H%M%S")}.xlsx'
+
+    return send_file(
+        arquivo,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        as_attachment=True,
+        download_name=nome_arquivo
+    )
+
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -4,3 +4,4 @@ flask-limiter
 bcrypt
 pyjwt
 python-dotenv
+openpyxl
