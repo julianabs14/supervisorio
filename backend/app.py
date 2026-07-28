@@ -400,7 +400,7 @@ def supervisorio():
 def cadastro_page():
     return send_from_directory('../frontend', 'cadastro.html')
 
-@app.route('/<psth:filename>')
+@app.route('/<path:filename>')
 def arquivos_estaticos(filename):
     return send_from_directory('../frontend', filename)
 
