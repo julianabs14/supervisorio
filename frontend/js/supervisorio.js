@@ -36,7 +36,7 @@ document.getElementById('btn-logout').addEventListener('click', function() {
 
 const token = localStorage.getItem('token')
 
-fetch('http://127.0.0.1:5000/status', {
+fetch('/status', {
     method: 'GET',
     headers:{
         'Authorization': token,
@@ -179,7 +179,7 @@ fetch('http://127.0.0.1:5000/status', {
 document.getElementById('btn-relatorio').addEventListener('click', function(){
     const token = localStorage.getItem('token')
 
-    fetch('http://127.0.0.1:5000/relatorio', {
+    fetch('/relatorio', {
         method: 'GET',
         headers:  { 'Authorization': token }
     })

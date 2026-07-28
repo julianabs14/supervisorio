@@ -388,6 +388,21 @@ def relatorio():
         download_name=nome_arquivo
     )
 
+@app.route('/')
+def index():
+    return send_from_directory('../frontend', 'index.html')
+
+@app.route('/supervisorio')
+def supervisorio():
+    return send_from_directory('..frontend', 'supervisorio.html')
+
+@app.route('../cadastro-page')
+def cadastro_page():
+    return send_from_directory('../frontend', 'cadastro.html')
+
+@app.route('/<psth:filename>')
+def arquivos_estaticos(filename):
+    return send_from_directory('../frontend', filename)
 
 if __name__ == '__main__':
     app.run(debug=True)
