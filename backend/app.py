@@ -396,7 +396,7 @@ def index():
 def supervisorio():
     return send_from_directory('..frontend', 'supervisorio.html')
 
-@app.route('../cadastro-page')
+@app.route('/cadastro-page')
 def cadastro_page():
     return send_from_directory('../frontend', 'cadastro.html')
 
