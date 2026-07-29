@@ -123,7 +123,7 @@ python app.py
 ```
 
 ###  Developer
-**Juliana Bezerra** — Electromechanics Apprentice | Processes @ Heineken Brasil | Software Engineering Student
+**Juliana Bezerra** — Electromechanics Apprentice | Brewery @ Heineken Brasil | Software Engineering Student
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Juliana_Bezerra-blue)](https://www.linkedin.com/in/juliana-bezerra-03b8562b4/)
 [![GitHub](https://img.shields.io/badge/GitHub-julianabs14-black)](https://github.com/julianabs14)
