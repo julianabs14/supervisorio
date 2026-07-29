@@ -1,4 +1,4 @@
-# TecnoSensor — Supervisório de Manutenção Preditiva
+# TechnoSensor — Supervisório de Manutenção Preditiva
 
 > 🇧🇷 Português | 🇺🇸 [English below](#english)
 
